@@ -1,0 +1,88 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bone: #e8e4d8;
+    --bone-2: #f2eee4;
+    --linen: #d5cebb;
+    --linen-2: #c9c2af;
+    --hay: #b8a07a;
+    --ochre: #b7773a;
+    --ochre-deep: #8f5a26;
+    --eucalypt: #5a6b4c;
+    --forest: #324036;
+    --ink: #1f2a1f;
+    --earth: #8a6e5d;
+  }
+
+  html,
+  body {
+    background: var(--bone);
+    color: var(--ink);
+  }
+
+  body {
+    font-family: var(--f-body), system-ui, -apple-system, "Segoe UI", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background: var(--ochre);
+    color: var(--bone);
+  }
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-md font-semibold leading-none transition duration-fast ease-brand;
+  }
+  .btn-primary {
+    @apply bg-ochre text-bone hover:bg-ochre-deep active:scale-[0.98];
+  }
+  .btn-ink {
+    @apply bg-ink text-bone hover:bg-forest active:scale-[0.98];
+  }
+  .btn-secondary {
+    @apply border-[1.5px] border-ink text-ink hover:bg-ink hover:text-bone active:scale-[0.98];
+  }
+
+  .eyebrow {
+    @apply font-body text-[11px] font-semibold uppercase tracking-eyebrowwide text-earth;
+  }
+
+  .display-hero {
+    font-family: var(--f-display), system-ui, sans-serif;
+    font-weight: 800;
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+  }
+
+  .display-h2 {
+    font-family: var(--f-display), system-ui, sans-serif;
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.025em;
+  }
+
+  .accent-italic {
+    font-family: var(--f-body), system-ui, sans-serif;
+    font-style: italic;
+    font-weight: 400;
+    color: var(--ochre);
+    letter-spacing: -0.02em;
+    text-transform: none;
+  }
+}
+
+/* Reserve the sticky CTA's vertical room on mobile so it never overlaps the footer.
+   Set on <main> via padding utility. */
+@media (max-width: 767px) {
+  .sticky-pad {
+    padding-bottom: 76px;
+  }
+}
