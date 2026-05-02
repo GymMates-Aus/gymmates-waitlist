@@ -1,11 +1,12 @@
 import Image from "next/image";
 import WaitlistForm from "./WaitlistForm";
+import { getSubscriberCount } from "@/lib/providers/beehiiv";
 
-// TODO(counter): replace 247 with the live count from /api/waitlist GET
-//   (or whatever endpoint we end up exposing).
-const HARDCODED_COUNT = 247;
+const FALLBACK_COUNT = 247; // Used when Beehiiv isn't configured or errors.
 
-export default function Hero() {
+export default async function Hero() {
+  const live = await getSubscriberCount();
+  const count = live ?? FALLBACK_COUNT;
   return (
     <section
       id="hero"
@@ -88,8 +89,8 @@ export default function Hero() {
               ))}
             </div>
             <span>
-              <strong className="text-bone font-semibold">{HARDCODED_COUNT}</strong>{" "}
-              already on the list
+              <strong className="text-bone font-semibold">{count}</strong> already
+              on the list
             </span>
           </div>
         </div>

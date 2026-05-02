@@ -29,40 +29,48 @@ npx vercel
 
 The project root for the deploy is the `waitlist/` folder. Set the project root to `waitlist` in the Vercel dashboard if importing from a monorepo, or run `vercel` from inside `waitlist/`.
 
-## Where to plug in the email service
+## Email service · Beehiiv
 
-`app/api/waitlist/route.ts` is a stub that:
+The form is wired to [Beehiiv](https://beehiiv.com) via `lib/providers/beehiiv.ts`. When the env vars below are set, signups go to Beehiiv. When they're missing (e.g. local dev with no key), the route falls through to a stub that logs the email and returns a fake position, so the page still demos end-to-end.
 
-- validates the email,
-- discards anything that filled the honeypot,
-- generates a fake referral code,
-- returns a fake position.
+### Setup, once
 
-To wire a real provider:
+1. Create a publication at <https://app.beehiiv.com>.
+2. Settings → Integrations → API → **generate an API key**.
+3. Settings → Integrations → API → copy the **publication id** (`pub_…`).
+4. In the project root, copy `.env.example` to `.env.local` and paste the two values:
 
-- **ConvertKit** — POST to `https://api.convertkit.com/v3/forms/<form_id>/subscribe` with `api_key` from env. Replace the `console.log(...)` line.
-- **Beehiiv** — POST to `https://api.beehiiv.com/v2/publications/<pub_id>/subscriptions` with the API key from env.
-- **Resend (with your own DB)** — write the row to your DB inside the route, send the welcome email via Resend.
+   ```env
+   BEEHIIV_API_KEY=...
+   BEEHIIV_PUBLICATION_ID=pub_xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+   ```
 
-Mark the secrets in `.env.local`:
+5. Restart `npm run dev`. The hero "X already on the list" line will switch to the live Beehiiv subscriber count (cached for ten minutes via Next's `revalidate`).
 
-```
-WAITLIST_PROVIDER_API_KEY=...
-WAITLIST_FORM_ID=...
-```
+### What lands in Beehiiv on each signup
 
-…and read them via `process.env.*` inside the route handler.
+- `email`
+- `referring_site = waitlist.gymmates.com.au`
+- `utm_source / utm_medium / utm_campaign` set to identify waitlist traffic
+- Custom fields: `our_ref_code` (the code we generated for this signup) and `referred_by` (if they arrived via someone's `?ref=` link)
+- `reactivate_existing: true` so re-signups don't error
+- `send_welcome_email: true` so Beehiiv triggers your welcome automation
 
-## Where to update the waitlist counter
+### Referrals via Beehiiv's hosted leaderboard
 
-Two places, both currently hardcoded:
+Beehiiv has a built-in referral programme that produces shareable links and a public leaderboard. Two ways to use it:
 
-| Spot | File | Constant |
-|---|---|---|
-| Hero "247 already on the list" | `components/Hero.tsx` | `HARDCODED_COUNT` |
-| Confirmation "#248 in line" fallback | `app/confirmed/page.tsx` | the `248` literal |
+1. **Keep our share links as-is** (default). Our `?ref=<code>` codes work today; the field gets stored as a custom field in Beehiiv for attribution. The leaderboard endpoint stays unused.
+2. **Switch to Beehiiv's referral codes**. Enable the referral programme in Beehiiv, then read `referral_code` from the create-subscription response. The provider already does this and prefers Beehiiv's code when present, so no code change is needed.
 
-Both are tagged `TODO(counter)`. The cleanest path is to expose a `GET /api/waitlist` that returns `{ count }`, then read it in a server component (`Hero`) at request time.
+### Switching providers later
+
+Drop a sibling adapter into `lib/providers/` (e.g. `convertkit.ts`) with the same `subscribe()` / `getSubscriberCount()` shape, then swap the import in `app/api/waitlist/route.ts` and `components/Hero.tsx`.
+
+## Counters
+
+- **Hero "X already on the list"** — reads `getSubscriberCount()` from the Beehiiv adapter, falls back to `FALLBACK_COUNT = 247` in `components/Hero.tsx` when Beehiiv isn't configured or the API fails. Cached 10 min.
+- **Confirmation "#N in line"** — currently a stub (`248` fallback in `app/confirmed/page.tsx`, plus a small jitter from the API). Beehiiv doesn't expose a per-subscriber queue position natively; if you want a real number, the cleanest path is computing it from the subscription created-at via Beehiiv's list endpoint, or storing your own count in a DB row alongside the signup.
 
 ## Where to wire real referral logic
 

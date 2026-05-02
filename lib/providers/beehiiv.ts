@@ -1,0 +1,153 @@
+/**
+ * Beehiiv adapter.
+ *
+ * Wraps the two endpoints we care about:
+ *   POST /v2/publications/{id}/subscriptions   - create a subscription
+ *   GET  /v2/publications/{id}?expand=stats    - read subscriber stats
+ *
+ * Designed so the rest of the app can call subscribe() / getSubscriberCount()
+ * without knowing which provider is wired underneath.
+ */
+
+const BEEHIIV_BASE = "https://api.beehiiv.com/v2";
+
+export interface SubscribeInput {
+  email: string;
+  /** Inbound referral code from ?ref= on the landing URL, if any. */
+  referredBy?: string | null;
+  /** Our own short code we generated for this signup, used for share links. */
+  ourRefCode: string;
+}
+
+export interface SubscribeResult {
+  /** Provider's subscription id, useful for later lookups. */
+  providerId: string | null;
+  /** Beehiiv's referral_code if exposed by the API, else null. */
+  beehiivReferralCode: string | null;
+  status: string;
+}
+
+export class BeehiivConfigError extends Error {
+  constructor() {
+    super("beehiiv-not-configured");
+    this.name = "BeehiivConfigError";
+  }
+}
+export class BeehiivApiError extends Error {
+  status: number;
+  body: string;
+  constructor(status: number, body: string) {
+    super(`beehiiv-${status}`);
+    this.name = "BeehiivApiError";
+    this.status = status;
+    this.body = body;
+  }
+}
+
+function readConfig() {
+  const apiKey = process.env.BEEHIIV_API_KEY;
+  const publicationId = process.env.BEEHIIV_PUBLICATION_ID;
+  if (!apiKey || !publicationId) throw new BeehiivConfigError();
+  return { apiKey, publicationId };
+}
+
+export function isBeehiivConfigured(): boolean {
+  return Boolean(process.env.BEEHIIV_API_KEY && process.env.BEEHIIV_PUBLICATION_ID);
+}
+
+export async function subscribeBeehiiv(
+  input: SubscribeInput,
+): Promise<SubscribeResult> {
+  const { apiKey, publicationId } = readConfig();
+
+  const res = await fetch(
+    `${BEEHIIV_BASE}/publications/${publicationId}/subscriptions`,
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: input.email,
+        reactivate_existing: true,
+        send_welcome_email: true,
+        utm_source: "waitlist",
+        utm_medium: "landing-page",
+        utm_campaign: "pre-launch",
+        referring_site: "waitlist.gymmates.com.au",
+        // If they arrived via someone's ref link, hand it to Beehiiv.
+        // Beehiiv expects its own referral_code format here. If our internal
+        // codes don't match Beehiiv's scheme, Beehiiv will simply ignore the
+        // field; attribution still works locally via custom_fields below.
+        referral_code: input.referredBy || undefined,
+        custom_fields: [
+          { name: "our_ref_code", value: input.ourRefCode },
+          ...(input.referredBy
+            ? [{ name: "referred_by", value: input.referredBy }]
+            : []),
+        ],
+      }),
+      // Don't cache POSTs.
+      cache: "no-store",
+    },
+  );
+
+  const text = await res.text();
+  if (!res.ok) {
+    throw new BeehiivApiError(res.status, text.slice(0, 500));
+  }
+
+  let json: unknown;
+  try {
+    json = JSON.parse(text);
+  } catch {
+    throw new BeehiivApiError(500, "non-json-response");
+  }
+
+  // Defensive shape read. Beehiiv returns { data: { id, status, referral_code? } }.
+  const data = (json as { data?: Record<string, unknown> })?.data ?? {};
+  return {
+    providerId: typeof data.id === "string" ? data.id : null,
+    beehiivReferralCode:
+      typeof data.referral_code === "string" ? data.referral_code : null,
+    status: typeof data.status === "string" ? data.status : "active",
+  };
+}
+
+/**
+ * Best-effort live subscriber count, with a 10-minute Next.js cache.
+ * Returns null on any failure so callers can fall back to a stub number.
+ */
+export async function getSubscriberCount(): Promise<number | null> {
+  let config: { apiKey: string; publicationId: string };
+  try {
+    config = readConfig();
+  } catch {
+    return null;
+  }
+
+  try {
+    const res = await fetch(
+      `${BEEHIIV_BASE}/publications/${config.publicationId}?expand[]=stats`,
+      {
+        headers: { Authorization: `Bearer ${config.apiKey}` },
+        next: { revalidate: 600 },
+      },
+    );
+    if (!res.ok) return null;
+    const json = (await res.json()) as {
+      data?: {
+        stats?: {
+          active_subscriptions?: number;
+          total_subscriptions?: number;
+        };
+      };
+    };
+    const stats = json?.data?.stats;
+    const n = stats?.active_subscriptions ?? stats?.total_subscriptions;
+    return typeof n === "number" && n > 0 ? n : null;
+  } catch {
+    return null;
+  }
+}
