@@ -31,10 +31,10 @@ export default function Footer() {
             </li>
             <li>
               <a
-                href="mailto:hello@gymmates.com.au"
+                href="mailto:support@gymmates.com.au"
                 className="hover:text-ochre transition duration-fast ease-brand"
               >
-                hello@gymmates.com.au
+                support@gymmates.com.au
               </a>
             </li>
             <li>

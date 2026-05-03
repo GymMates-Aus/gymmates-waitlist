@@ -36,10 +36,10 @@ export default function PrivacyPage() {
           <p className="text-fg-muted text-[16px] leading-[1.6] mb-4">
             If you want your email removed from our records, write to{" "}
             <a
-              href="mailto:hello@gymmates.com.au"
+              href="mailto:support@gymmates.com.au"
               className="text-ink underline decoration-ochre decoration-2 underline-offset-4"
             >
-              hello@gymmates.com.au
+              support@gymmates.com.au
             </a>{" "}
             and we&rsquo;ll do it within seven days.
           </p>

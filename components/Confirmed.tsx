@@ -246,10 +246,10 @@ export default function Confirmed({
         <p className="mt-10 text-[13px] text-bone/55">
           Wrong email or want to leave the list?{" "}
           <a
-            href="mailto:hello@gymmates.com.au"
+            href="mailto:support@gymmates.com.au"
             className="text-bone underline decoration-ochre decoration-2 underline-offset-4 hover:text-ochre"
           >
-            hello@gymmates.com.au
+            support@gymmates.com.au
           </a>
         </p>
       </div>
