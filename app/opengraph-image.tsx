@@ -6,14 +6,16 @@ export const alt = "GymMates · All you need is a mate";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-// CDN-hosted font binaries via @fontsource on jsdelivr. Stable URLs, public,
-// no auth. Required because Netlify's edge runtime doesn't ship the same
-// default fonts as Vercel, so the previous system-ui stack was failing to
-// resolve and crashing the route with a 500.
+// CDN-hosted font binaries via @fontsource on jsdelivr. Unversioned URLs
+// resolve to the latest published woff. Required because Netlify's edge
+// runtime doesn't ship the same default fonts as Vercel, so the system-ui
+// stack failed to resolve and crashed the route. Probe with curl -I before
+// changing these URLs; specific version pins (e.g. @5.0.21) have returned
+// 404 for some weight/style combos.
 const DISPLAY_FONT_URL =
-  "https://cdn.jsdelivr.net/npm/@fontsource/plus-jakarta-sans@5.0.21/files/plus-jakarta-sans-latin-800-normal.woff";
+  "https://cdn.jsdelivr.net/npm/@fontsource/plus-jakarta-sans/files/plus-jakarta-sans-latin-800-normal.woff";
 const ACCENT_FONT_URL =
-  "https://cdn.jsdelivr.net/npm/@fontsource/work-sans@5.0.21/files/work-sans-latin-400-italic.woff";
+  "https://cdn.jsdelivr.net/npm/@fontsource/work-sans/files/work-sans-latin-400-italic.woff";
 
 async function fetchFont(url: string): Promise<ArrayBuffer> {
   const res = await fetch(url, { cache: "force-cache" });
