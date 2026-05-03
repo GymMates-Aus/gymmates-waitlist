@@ -20,12 +20,12 @@ export default function Trust() {
             className="opacity-90"
           />
           <a
-            href="https://nextlevelechuca.com.au"
+            href="https://www.instagram.com/nextlevel_echucamoama/"
             target="_blank"
             rel="noopener noreferrer"
             className="font-body text-[14px] font-semibold text-ink underline decoration-ochre decoration-2 underline-offset-4 hover:text-ochre-deep transition duration-fast ease-brand"
           >
-            nextlevelechuca.com.au
+            @nextlevel_echucamoama on Instagram
           </a>
         </div>
 

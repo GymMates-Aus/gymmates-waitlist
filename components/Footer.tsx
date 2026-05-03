@@ -21,12 +21,12 @@ export default function Footer() {
           <ul className="flex flex-wrap gap-x-6 gap-y-2 text-[14px] text-bone/70">
             <li>
               <a
-                href="https://nextlevelechuca.com.au"
+                href="https://www.instagram.com/nextlevel_echucamoama/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-ochre transition duration-fast ease-brand"
               >
-                Next Level Echuca
+                Next Level Echuca · Instagram
               </a>
             </li>
             <li>

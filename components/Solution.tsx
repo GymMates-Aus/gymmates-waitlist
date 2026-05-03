@@ -1,13 +1,15 @@
+// Mixed audience copy: defaults to "exercise" so the door stays open to mums
+// and gym-anxious members. See CLAUDE.md voice rules · audience language.
 const steps = [
   {
     n: "01",
-    title: "Tell us how you train.",
+    title: "Tell us how you exercise.",
     body: "Five minutes. Your gym, your usual times, your style. No fitness exam.",
   },
   {
     n: "02",
     title: "Get matched with one mate.",
-    body: "Same gym. Same kind of training. Same rough schedule. Same gender by default.",
+    body: "Same gym. Same vibe. Same rough schedule. Same gender by default.",
   },
   {
     n: "03",

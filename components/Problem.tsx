@@ -27,8 +27,9 @@ export default function Problem() {
             <span className="accent-italic">life happened.</span>
           </h2>
           <p className="mt-3 sm:mt-4 text-[16px] sm:text-[18px] leading-[1.55] text-fg-muted">
-            Most people stop showing up not because they got lazy, but because nobody
-            was expecting them. A mate fixes that, faster than any new program.
+            Most people stop going to the gym, not because they got lazy, but
+            because nobody was expecting them. A mate keeps you accountable and
+            fixes that, faster than any new program.
           </p>
         </div>
 

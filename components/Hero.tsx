@@ -19,16 +19,6 @@ export default async function Hero() {
       // section is visible to encourage scroll on tall phones.
       style={{ minHeight: "100svh" }}
     >
-      {/* Subtle warm radial wash, picked up from the brand kit hero treatment */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0"
-        style={{
-          background:
-            "radial-gradient(circle at 30% 18%, rgba(183,119,58,0.18), transparent 55%)",
-        }}
-      />
-
       {/* Top brand bar */}
       <header className="relative z-10 max-w-6xl mx-auto px-5 sm:px-8 pt-5 sm:pt-7 flex items-center justify-between">
         <div className="flex items-center gap-2.5">
@@ -57,14 +47,14 @@ export default async function Hero() {
           </p>
 
           <h1 className="display-hero text-[clamp(36px,9vw,72px)]">
-            One mate.<br />
-            Same gym.<br />
-            <span className="accent-italic normal-case">you&apos;ll show up.</span>
+            All you need<br />
+            is a mate.<br />
+            <span className="accent-italic normal-case">&amp; you&apos;ll show up.</span>
           </h1>
 
           <p className="mt-5 sm:mt-6 max-w-[44ch] text-[16px] sm:text-[18px] leading-[1.55] text-bone/80">
-            GymMates pairs you with one compatible mate at your gym, so showing up gets
-            a little easier. Free for members. Built in regional Victoria.
+            GymMates pairs you with one compatible mate, because we know having a
+            mate who shares your goals makes you want to exercise.
           </p>
 
           <div className="mt-6 sm:mt-7 max-w-[440px]">
@@ -99,26 +89,17 @@ export default async function Hero() {
         </div>
 
         {/* Visual tile. Hidden on small phones so the form stays above the
-            fold. Reappears on >= sm to add weight on tablet/desktop. */}
-        <div className="hidden sm:block relative aspect-[4/5] rounded-lg bg-ink/40 overflow-hidden">
-          <div
-            aria-hidden="true"
-            className="absolute inset-0"
-            style={{
-              background:
-                "radial-gradient(circle at 30% 20%, rgba(183,119,58,0.22), transparent 60%)",
-            }}
+            fold. Reappears on >= sm to add weight on tablet/desktop. Pure
+            ink/forest, no warm wash, per brand direction lock-in. */}
+        <div className="hidden sm:grid place-items-center relative aspect-[4/5] rounded-lg bg-ink/40 overflow-hidden border border-white/5">
+          <Image
+            src="/brand/handshake-large.png"
+            alt="GymMates handshake mark"
+            width={520}
+            height={520}
+            priority
+            className="w-1/2 h-auto opacity-95"
           />
-          <div className="absolute inset-0 grid place-items-center">
-            <Image
-              src="/brand/handshake-large.png"
-              alt="GymMates handshake mark"
-              width={520}
-              height={520}
-              priority
-              className="w-1/2 h-auto opacity-95"
-            />
-          </div>
         </div>
       </div>
     </section>

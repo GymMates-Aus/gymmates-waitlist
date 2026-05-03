@@ -111,14 +111,6 @@ export default function Confirmed({
 
   return (
     <section className="bg-forest text-bone min-h-[100svh] py-14 sm:py-20">
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 top-0 h-[60vh]"
-        style={{
-          background:
-            "radial-gradient(circle at 30% 18%, rgba(183,119,58,0.18), transparent 55%)",
-        }}
-      />
       <div className="relative max-w-2xl mx-auto px-5 sm:px-8 text-center">
         <Link
           href="/"
@@ -147,21 +139,40 @@ export default function Confirmed({
           short note from the build.
         </p>
 
-        <div className="mt-9 inline-flex items-baseline gap-3 bg-white/[0.05] border border-white/10 rounded-lg px-6 py-5">
-          <span className="font-display font-extrabold text-[44px] sm:text-[56px] leading-none tabular-nums text-ochre">
-            #{position}
-          </span>
-          <span className="eyebrow text-bone/55">in line</span>
+        {/* Ochre handshake mark, replacing the queue-position number. The
+            position itself isn't material to the user, but the mark gives the
+            page a focal point and reinforces the brand. */}
+        <div
+          className="mt-9 mx-auto inline-grid place-items-center w-32 h-32 sm:w-40 sm:h-40 rounded-2xl bg-white/[0.04] border border-white/10"
+          aria-hidden="true"
+        >
+          <div
+            className="w-20 h-20 sm:w-24 sm:h-24"
+            style={{
+              backgroundColor: "var(--ochre)",
+              WebkitMaskImage: "url(/handshake.png)",
+              WebkitMaskSize: "contain",
+              WebkitMaskRepeat: "no-repeat",
+              WebkitMaskPosition: "center",
+              maskImage: "url(/handshake.png)",
+              maskSize: "contain",
+              maskRepeat: "no-repeat",
+              maskPosition: "center",
+            }}
+          />
         </div>
+        {/* Position is preserved internally for analytics later, just not
+            displayed on this page anymore. */}
+        <span className="sr-only">You are number {position} on the waitlist.</span>
 
         {/* Referral block */}
         <div className="mt-10 sm:mt-12 bg-white/[0.04] border border-white/10 rounded-lg p-6 sm:p-8 text-left">
           <h2 className="font-display font-bold text-[20px] sm:text-[22px] mb-1">
-            Move up the list.
+            Tell your mates.
           </h2>
           <p className="text-[14px] sm:text-[15px] leading-[1.55] text-bone/70 mb-5">
-            Every mate you refer bumps you up. If they sign up through your link, you
-            both jump the queue.
+            The more mates we get on GymMates, the more people we can help. It&rsquo;s
+            free, and might positively change their life.
           </p>
 
           <label className="block">
