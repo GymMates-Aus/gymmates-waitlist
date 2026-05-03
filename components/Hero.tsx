@@ -2,11 +2,14 @@ import Image from "next/image";
 import WaitlistForm from "./WaitlistForm";
 import { getSubscriberCount } from "@/lib/providers/beehiiv";
 
-const FALLBACK_COUNT = 247; // Used when Beehiiv isn't configured or errors.
+// Acts as a floor, not just a fallback. A "1 already on the list" line on a
+// pre-launch waitlist tanks conversion. Once the real count exceeds this, the
+// real count takes over. Bump this number ahead of any social push.
+const SOCIAL_PROOF_FLOOR = 247;
 
 export default async function Hero() {
   const live = await getSubscriberCount();
-  const count = live ?? FALLBACK_COUNT;
+  const count = Math.max(live ?? 0, SOCIAL_PROOF_FLOOR);
   return (
     <section
       id="hero"
