@@ -1,0 +1,25 @@
+# Netlify build config for the GymMates waitlist project.
+# Netlify auto-detects Next.js and installs @netlify/plugin-nextjs, but pinning
+# this here keeps the build deterministic and leaves a trail in the repo.
+
+[build]
+  command   = "npm run build"
+  publish   = ".next"
+
+[build.environment]
+  # Pin Node so a Netlify-side default bump doesn't surprise us.
+  NODE_VERSION = "20"
+  NEXT_TELEMETRY_DISABLED = "1"
+
+[[plugins]]
+  # The Next.js runtime. Handles SSR, App Router, edge functions for
+  # next/og, ISR for the hero subscriber count, and serverless route handlers
+  # like /api/waitlist and /api/partner.
+  package = "@netlify/plugin-nextjs"
+
+# Optional: turn on Netlify's per-deploy preview headers if you want to keep
+# preview URLs unindexed by search engines. Production already sets robots.ts.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Robots-Tag = "all"

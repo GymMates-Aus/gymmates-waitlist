@@ -21,13 +21,25 @@ npm run build
 npm start
 ```
 
-Deploy to Vercel:
+### Recommended: Netlify (free, supports private org repos)
 
-```bash
-npx vercel
-```
+Vercel's Hobby tier blocks deploys from private repos owned by a GitHub organisation, so the org-owned repo at `GymMates-Aus/gymmates-waitlist` can't deploy to Vercel without a Pro subscription ($20/seat/month). Netlify's free tier supports it and explicitly allows commercial use.
 
-The project root for the deploy is the `waitlist/` folder. Set the project root to `waitlist` in the Vercel dashboard if importing from a monorepo, or run `vercel` from inside `waitlist/`.
+1. Sign in at <https://app.netlify.com> with GitHub.
+2. **Add new site → Import an existing project** → pick `GymMates-Aus/gymmates-waitlist`.
+3. Netlify reads `netlify.toml` and configures the Next.js runtime automatically. Build command is `npm run build`, publish dir `.next`.
+4. **Site configuration → Environment variables** → add:
+   ```
+   BEEHIIV_API_KEY        = <your key>
+   BEEHIIV_PUBLICATION_ID = pub_a1f7a3ce-0985-4b38-a154-b5a5e06902da
+   ```
+5. **Deploy.** ~90 seconds. Push to `main` redeploys.
+
+Custom domains under **Domain management** → add `waitlist.gymmates.com.au` and `partner.gymmates.com.au` (the second points to the same site, with a Netlify redirect rule sending its root to `/partner`).
+
+### Alternative: Vercel
+
+Works on the **Pro** tier ($20/seat/month) for org-owned private repos, or on the **Hobby** tier if you transfer the repo to your personal account first.
 
 ## Email service · Beehiiv
 
