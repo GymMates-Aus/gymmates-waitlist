@@ -35,12 +35,20 @@ export const metadata: Metadata = {
     siteName: "GymMates",
     type: "website",
     locale: "en_AU",
-    // OG image is generated dynamically by app/opengraph-image.tsx (next/og).
+    images: [
+      {
+        url: "/og.png",
+        width: 1536,
+        height: 1024,
+        alt: "GymMates · All you need is a mate",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: TITLE,
     description: DESC,
+    images: ["/og.png"],
   },
   icons: {
     icon: "/favicon.png",

@@ -20,16 +20,13 @@ Live at <https://gymmates-watlist.netlify.app> (typo in the subdomain, fix later
 | GitHub repo | ✓ <https://github.com/GymMates-Aus/gymmates-waitlist> (public) |
 | Continuous deploy on `main` push | ✓ |
 
-## ⏳ I just pushed an OG image fix
+## ✅ I fixed the OG image differently than planned
 
-The `/opengraph-image` route was 500-ing because Netlify's edge runtime doesn't have system fonts. Switched to fetching Plus Jakarta Sans + Work Sans Italic from jsdelivr at runtime, with a graceful fallback if the CDN's down. Should be green by the time you wake up. Verify with:
+Tried two iterations of runtime-rendered OG via `next/og` + CDN-fetched fonts. Both kept 500-ing on Netlify Edge after 7+ minutes of polling — Netlify's edge runtime has constraints I couldn't diagnose without account access. Pivoted to a **static `og.png`** at `public/og.png` (using your existing hero photo from `assets/website/hero image still.png`, 1536×1024). This always works, never depends on edge runtime, and looks like real marketing imagery.
 
-```bash
-curl -sI https://gymmates-watlist.netlify.app/opengraph-image
-# expect: HTTP/2 200, content-type: image/png
-```
+The runtime OG route (`app/opengraph-image.tsx`) is removed. `app/layout.tsx` now references the static file in the OpenGraph + Twitter metadata blocks.
 
-If still 500, I left a fallback path that uses the bundled default font. Worst case the image renders without italic styling — still better than broken.
+To improve the OG image later, drop a better-designed 1200×630 PNG into `public/og.png` (replace the hero photo). The metadata picks it up automatically. If you want it Plus-Jakarta-branded with the headline overlaid, design it once in Canva or Figma at 1200×630 and replace the file.
 
 ---
 
