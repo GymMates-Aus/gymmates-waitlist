@@ -10,6 +10,12 @@
   # Pin Node so a Netlify-side default bump doesn't surprise us.
   NODE_VERSION = "20"
   NEXT_TELEMETRY_DISABLED = "1"
+  # The Beehiiv publication ID is a public identifier (Beehiiv embeds it in
+  # public form snippets), not a credential. Netlify's secret scanner is
+  # cautious by default and flags any env-var value that appears in source.
+  # Omit this specific key from the scan so the README and reference docs can
+  # reference the value without failing the build.
+  SECRETS_SCAN_OMIT_KEYS = "BEEHIIV_PUBLICATION_ID"
 
 [[plugins]]
   # The Next.js runtime. Handles SSR, App Router, edge functions for
