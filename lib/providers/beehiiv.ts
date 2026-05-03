@@ -11,12 +11,22 @@
 
 const BEEHIIV_BASE = "https://api.beehiiv.com/v2";
 
+export type Audience = "consumer" | "partner";
+
 export interface SubscribeInput {
   email: string;
   /** Inbound referral code from ?ref= on the landing URL, if any. */
   referredBy?: string | null;
   /** Our own short code we generated for this signup, used for share links. */
   ourRefCode: string;
+  /**
+   * Which landing the signup came from. Used to set distinct UTM tags so the
+   * audiences are segmentable in Beehiiv (different welcome flows, different
+   * monthly notes, different sender names if needed).
+   */
+  audience?: Audience;
+  /** Extra custom fields, e.g. gym_name / gym_role for the partner form. */
+  extraCustomFields?: Array<{ name: string; value: string }>;
 }
 
 export interface SubscribeResult {
@@ -72,20 +82,27 @@ export async function subscribeBeehiiv(
         email: input.email,
         reactivate_existing: true,
         send_welcome_email: true,
-        utm_source: "waitlist",
+        utm_source:
+          input.audience === "partner" ? "partner-waitlist" : "waitlist",
         utm_medium: "landing-page",
-        utm_campaign: "pre-launch",
-        referring_site: "waitlist.gymmates.com.au",
+        utm_campaign:
+          input.audience === "partner" ? "partner-pre-register" : "pre-launch",
+        referring_site:
+          input.audience === "partner"
+            ? "waitlist.gymmates.com.au/partner"
+            : "waitlist.gymmates.com.au",
         // If they arrived via someone's ref link, hand it to Beehiiv.
         // Beehiiv expects its own referral_code format here. If our internal
         // codes don't match Beehiiv's scheme, Beehiiv will simply ignore the
         // field; attribution still works locally via custom_fields below.
         referral_code: input.referredBy || undefined,
         custom_fields: [
+          { name: "audience", value: input.audience ?? "consumer" },
           { name: "our_ref_code", value: input.ourRefCode },
           ...(input.referredBy
             ? [{ name: "referred_by", value: input.referredBy }]
             : []),
+          ...(input.extraCustomFields ?? []),
         ],
       }),
       // Don't cache POSTs.
