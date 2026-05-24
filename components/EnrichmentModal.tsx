@@ -150,7 +150,7 @@ export default function EnrichmentModal({ open, subscriptionId, onDone }: Props)
               id="enrich-title"
               className="font-display font-extrabold text-[22px] sm:text-[26px] tracking-tight leading-tight"
             >
-              {persona === null && "One quick thing."}
+              {persona === null && "Are you a…"}
               {persona === "user" && "Help us bring GymMates to your gym."}
               {persona === "gym_owner" && "Let’s get GymMates at your gym."}
             </h2>
@@ -178,28 +178,28 @@ export default function EnrichmentModal({ open, subscriptionId, onDone }: Props)
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
               <button
                 type="button"
-                onClick={() => setPersona("user")}
-                className="text-left group bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 hover:border-ochre/60 rounded-lg p-5 transition duration-fast ease-brand"
-              >
-                <p className="font-display font-bold text-[17px] mb-1.5">
-                  I&rsquo;m a gym-goer
-                </p>
-                <p className="text-[13px] leading-[1.5] text-bone/65">
-                  I want a mate at my gym. We&rsquo;ll let your gym know one of
-                  their members is keen.
-                </p>
-              </button>
-              <button
-                type="button"
                 onClick={() => setPersona("gym_owner")}
                 className="text-left group bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 hover:border-ochre/60 rounded-lg p-5 transition duration-fast ease-brand"
               >
                 <p className="font-display font-bold text-[17px] mb-1.5">
-                  I run a gym
+                  Gym Owner / Manager?
                 </p>
                 <p className="text-[13px] leading-[1.5] text-bone/65">
-                  I want to bring GymMates to my members. Founding-partner
-                  pricing locked for 24 months.
+                  Bring GymMates to your members. Founding-partner pricing
+                  locked for 24 months.
+                </p>
+              </button>
+              <button
+                type="button"
+                onClick={() => setPersona("user")}
+                className="text-left group bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 hover:border-ochre/60 rounded-lg p-5 transition duration-fast ease-brand"
+              >
+                <p className="font-display font-bold text-[17px] mb-1.5">
+                  Member of a Gym?
+                </p>
+                <p className="text-[13px] leading-[1.5] text-bone/65">
+                  Want a mate at your gym. We&rsquo;ll let your gym know one
+                  of their members is keen.
                 </p>
               </button>
             </div>
