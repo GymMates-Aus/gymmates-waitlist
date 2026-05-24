@@ -76,6 +76,18 @@ export async function POST(req: NextRequest) {
   if (firstName) customFields.push({ name: "first_name", value: firstName });
   if (lastName) customFields.push({ name: "last_name", value: lastName });
 
+  // Both personas may supply gym address fields; for the user persona these
+  // identify the gym they go to so partner outreach can find it. Gym name
+  // is captured as `attends_gym` for users (their attended gym) and
+  // `gym_name` for owners (their official gym name), so the two paths can
+  // be distinguished in Beehiiv later if needed.
+  const suburb = clean(body.suburb, 120);
+  const state = clean(body.state, 60);
+  const postcode = clean(body.postcode, 12);
+  if (suburb) customFields.push({ name: "gym_town", value: suburb });
+  if (state) customFields.push({ name: "gym_state", value: state });
+  if (postcode) customFields.push({ name: "gym_postcode", value: postcode });
+
   if (persona === "user") {
     const attendsGym = clean(body.attendsGym, 200);
     if (attendsGym) {
@@ -84,13 +96,7 @@ export async function POST(req: NextRequest) {
   } else {
     // gym_owner
     const gymName = clean(body.gymName, 200);
-    const suburb = clean(body.suburb, 120);
-    const state = clean(body.state, 60);
-    const postcode = clean(body.postcode, 12);
     if (gymName) customFields.push({ name: "gym_name", value: gymName });
-    if (suburb) customFields.push({ name: "gym_town", value: suburb });
-    if (state) customFields.push({ name: "gym_state", value: state });
-    if (postcode) customFields.push({ name: "gym_postcode", value: postcode });
   }
 
   if (!isBeehiivConfigured()) {

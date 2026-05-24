@@ -91,13 +91,15 @@ export default function EnrichmentModal({ open, subscriptionId, onDone }: Props)
           persona,
           firstName,
           lastName,
-          // user fields
+          // user persona sends attendsGym + gym address so partner outreach
+          // can identify exactly which gym the member is asking us to chase.
           attendsGym: persona === "user" ? attendsGym : undefined,
-          // gym_owner fields
+          // gym_owner sends gymName as the official name (separate field).
           gymName: persona === "gym_owner" ? gymName : undefined,
-          suburb: persona === "gym_owner" ? suburb : undefined,
-          state: persona === "gym_owner" ? state : undefined,
-          postcode: persona === "gym_owner" ? postcode : undefined,
+          // suburb/state/postcode mean "gym's address" in both personas.
+          suburb,
+          state,
+          postcode,
           honeypot,
         }),
       });
@@ -215,10 +217,9 @@ export default function EnrichmentModal({ open, subscriptionId, onDone }: Props)
           <form onSubmit={submit} className="px-5 sm:px-7 pb-6 sm:pb-7 pt-3">
             <div className="rounded-lg bg-ink/15 border border-ink/20 p-4 mb-5">
               <p className="text-[14px] leading-[1.55] text-bone/85">
-                GymMates only works once your gym signs on. Tell us where you
-                train and we&rsquo;ll reach out to them, with you as the reason
-                they should join. The more members who do this, the louder the
-                message lands.
+                GymMates is free for users, but a partner program for gyms.
+                We&rsquo;ll need to get them onboard. The more members who
+                show interest, the louder the message lands!
               </p>
             </div>
 
@@ -232,7 +233,7 @@ export default function EnrichmentModal({ open, subscriptionId, onDone }: Props)
                   value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
                   className={inputCls}
-                  placeholder="Jamie"
+                  placeholder="First name"
                 />
               </label>
               <label className="flex flex-col gap-1.5">
@@ -244,7 +245,7 @@ export default function EnrichmentModal({ open, subscriptionId, onDone }: Props)
                   value={lastName}
                   onChange={(e) => setLastName(e.target.value)}
                   className={inputCls}
-                  placeholder="Mitchell"
+                  placeholder="Last name"
                 />
               </label>
             </div>
@@ -258,9 +259,57 @@ export default function EnrichmentModal({ open, subscriptionId, onDone }: Props)
                 value={attendsGym}
                 onChange={(e) => setAttendsGym(e.target.value)}
                 className={inputCls}
-                placeholder="Next Level Echuca"
+                placeholder="Your Gym&rsquo;s Name"
               />
             </label>
+
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-3">
+              <label className="flex flex-col gap-1.5 col-span-2 sm:col-span-1">
+                <span className={labelCls}>Gym suburb</span>
+                <input
+                  type="text"
+                  autoComplete="address-level2"
+                  required
+                  value={suburb}
+                  onChange={(e) => setSuburb(e.target.value)}
+                  className={inputCls}
+                  placeholder="Suburb"
+                />
+              </label>
+              <label className="flex flex-col gap-1.5">
+                <span className={labelCls}>Gym state</span>
+                <select
+                  autoComplete="address-level1"
+                  value={state}
+                  onChange={(e) => setState(e.target.value)}
+                  required
+                  className={inputCls}
+                >
+                  <option value="" disabled>
+                    State
+                  </option>
+                  {AU_STATES.map((s) => (
+                    <option key={s} value={s}>
+                      {s}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <label className="flex flex-col gap-1.5">
+                <span className={labelCls}>Gym postcode</span>
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  autoComplete="postal-code"
+                  required
+                  value={postcode}
+                  onChange={(e) => setPostcode(e.target.value)}
+                  className={inputCls}
+                  placeholder="Postcode"
+                  maxLength={4}
+                />
+              </label>
+            </div>
 
             <input
               type="text"
