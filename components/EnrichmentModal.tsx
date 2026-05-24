@@ -122,6 +122,13 @@ export default function EnrichmentModal({ open, subscriptionId, onDone }: Props)
 
   const inputCls =
     "w-full rounded-md bg-white/[0.12] border border-bone/25 text-bone placeholder:text-bone/55 px-3.5 py-3 text-[16px] focus:outline-none focus:border-bone focus:bg-white/[0.18] transition duration-fast ease-brand";
+  // Selects need a different treatment: native <option> dropdowns render on a
+  // browser-controlled background (often white), so cream-on-cream becomes
+  // invisible the moment the dropdown opens. Give the select a cream card
+  // look with ink text so both the closed state and the option list read
+  // clearly against the orange modal.
+  const selectCls =
+    "w-full rounded-md bg-bone border border-bone/40 text-ink px-3.5 py-3 text-[16px] focus:outline-none focus:border-ink focus:bg-bone-2 transition duration-fast ease-brand";
   const labelCls =
     "font-body text-[11px] font-semibold uppercase tracking-eyebrow text-bone/55";
 
@@ -283,13 +290,13 @@ export default function EnrichmentModal({ open, subscriptionId, onDone }: Props)
                   value={state}
                   onChange={(e) => setState(e.target.value)}
                   required
-                  className={inputCls}
+                  className={selectCls}
                 >
-                  <option value="" disabled>
+                  <option value="" disabled style={{ color: "#1F2A1F" }}>
                     State
                   </option>
                   {AU_STATES.map((s) => (
-                    <option key={s} value={s}>
+                    <option key={s} value={s} style={{ color: "#1F2A1F" }}>
                       {s}
                     </option>
                   ))}
@@ -415,13 +422,13 @@ export default function EnrichmentModal({ open, subscriptionId, onDone }: Props)
                   value={state}
                   onChange={(e) => setState(e.target.value)}
                   required
-                  className={inputCls}
+                  className={selectCls}
                 >
-                  <option value="" disabled>
+                  <option value="" disabled style={{ color: "#1F2A1F" }}>
                     State
                   </option>
                   {AU_STATES.map((s) => (
-                    <option key={s} value={s}>
+                    <option key={s} value={s} style={{ color: "#1F2A1F" }}>
                       {s}
                     </option>
                   ))}
