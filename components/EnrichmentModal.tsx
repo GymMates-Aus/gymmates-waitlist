@@ -39,7 +39,7 @@ export default function EnrichmentModal({ open, subscriptionId, onDone }: Props)
   const [attendsGym, setAttendsGym] = useState("");
   const [gymName, setGymName] = useState("");
   const [suburb, setSuburb] = useState("");
-  const [state, setState] = useState("VIC");
+  const [state, setState] = useState("");
   const [postcode, setPostcode] = useState("");
   const [honeypot, setHoneypot] = useState("");
   const [busy, setBusy] = useState(false);
@@ -342,7 +342,7 @@ export default function EnrichmentModal({ open, subscriptionId, onDone }: Props)
                 value={gymName}
                 onChange={(e) => setGymName(e.target.value)}
                 className={inputCls}
-                placeholder="Next Level Fitness Echuca"
+                placeholder="Your Gym’s Name"
               />
             </label>
 
@@ -356,7 +356,7 @@ export default function EnrichmentModal({ open, subscriptionId, onDone }: Props)
                   value={suburb}
                   onChange={(e) => setSuburb(e.target.value)}
                   className={inputCls}
-                  placeholder="Echuca"
+                  placeholder="Suburb"
                 />
               </label>
               <label className="flex flex-col gap-1.5">
@@ -365,8 +365,12 @@ export default function EnrichmentModal({ open, subscriptionId, onDone }: Props)
                   autoComplete="address-level1"
                   value={state}
                   onChange={(e) => setState(e.target.value)}
+                  required
                   className={inputCls}
                 >
+                  <option value="" disabled>
+                    State
+                  </option>
                   {AU_STATES.map((s) => (
                     <option key={s} value={s}>
                       {s}
@@ -384,7 +388,7 @@ export default function EnrichmentModal({ open, subscriptionId, onDone }: Props)
                   value={postcode}
                   onChange={(e) => setPostcode(e.target.value)}
                   className={inputCls}
-                  placeholder="3564"
+                  placeholder="Postcode"
                   maxLength={4}
                 />
               </label>
