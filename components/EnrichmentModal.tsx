@@ -119,7 +119,7 @@ export default function EnrichmentModal({ open, subscriptionId, onDone }: Props)
   // ────────────────────────────────────────────────────────────────────────
 
   const inputCls =
-    "w-full rounded-md bg-white/[0.08] border border-white/20 text-bone placeholder:text-bone/40 px-3.5 py-3 text-[16px] focus:outline-none focus:border-ochre focus:bg-white/[0.12] transition duration-fast ease-brand";
+    "w-full rounded-md bg-white/[0.12] border border-bone/25 text-bone placeholder:text-bone/55 px-3.5 py-3 text-[16px] focus:outline-none focus:border-bone focus:bg-white/[0.18] transition duration-fast ease-brand";
   const labelCls =
     "font-body text-[11px] font-semibold uppercase tracking-eyebrow text-bone/55";
 
@@ -138,12 +138,12 @@ export default function EnrichmentModal({ open, subscriptionId, onDone }: Props)
         className="absolute inset-0 bg-ink/70 backdrop-blur-sm"
       />
 
-      {/* Sheet/dialog. Eucalypt is the lighter brand green; rounded on all
-          sides on every viewport; capped at max-h with scroll so long
-          enrichment forms don't blow past the small mobile viewport. */}
+      {/* Sheet/dialog. Ochre ground (same as the CTA button) with bone text.
+          Rounded on all sides on every viewport; capped at max-h with scroll
+          so long enrichment forms don't blow past the small mobile viewport. */}
       <div
         ref={dialogRef}
-        className="relative w-full max-w-[420px] sm:max-w-xl bg-eucalypt text-bone shadow-deep rounded-2xl border border-white/10 overflow-hidden max-h-[90svh] overflow-y-auto"
+        className="relative w-full max-w-[420px] sm:max-w-xl bg-ochre text-bone shadow-deep rounded-2xl border border-bone/15 overflow-hidden max-h-[90svh] overflow-y-auto"
       >
         <div className="px-5 sm:px-7 pt-5 sm:pt-7 pb-2 flex items-start justify-between gap-3">
           <div>
@@ -176,7 +176,7 @@ export default function EnrichmentModal({ open, subscriptionId, onDone }: Props)
               <button
                 type="button"
                 onClick={() => setPersona("gym_owner")}
-                className="text-left group bg-white/[0.06] hover:bg-white/[0.12] active:bg-white/[0.14] border border-white/15 hover:border-ochre/70 rounded-lg p-4 sm:p-5 transition duration-fast ease-brand"
+                className="text-left group bg-white/[0.06] hover:bg-white/[0.12] active:bg-white/[0.14] border border-white/15 hover:border-bone/70 rounded-lg p-4 sm:p-5 transition duration-fast ease-brand"
               >
                 <p className="font-display font-bold text-[16px] sm:text-[17px] mb-1.5">
                   Gym Owner / Manager?
@@ -189,7 +189,7 @@ export default function EnrichmentModal({ open, subscriptionId, onDone }: Props)
               <button
                 type="button"
                 onClick={() => setPersona("user")}
-                className="text-left group bg-white/[0.06] hover:bg-white/[0.12] active:bg-white/[0.14] border border-white/15 hover:border-ochre/70 rounded-lg p-4 sm:p-5 transition duration-fast ease-brand"
+                className="text-left group bg-white/[0.06] hover:bg-white/[0.12] active:bg-white/[0.14] border border-white/15 hover:border-bone/70 rounded-lg p-4 sm:p-5 transition duration-fast ease-brand"
               >
                 <p className="font-display font-bold text-[16px] sm:text-[17px] mb-1.5">
                   Member of a Gym?
@@ -213,7 +213,7 @@ export default function EnrichmentModal({ open, subscriptionId, onDone }: Props)
 
         {persona === "user" && (
           <form onSubmit={submit} className="px-5 sm:px-7 pb-6 sm:pb-7 pt-3">
-            <div className="rounded-lg bg-ochre/10 border border-ochre/30 p-4 mb-5">
+            <div className="rounded-lg bg-ink/15 border border-ink/20 p-4 mb-5">
               <p className="text-[14px] leading-[1.55] text-bone/85">
                 GymMates only works once your gym signs on. Tell us where you
                 train and we&rsquo;ll reach out to them, with you as the reason
@@ -277,7 +277,7 @@ export default function EnrichmentModal({ open, subscriptionId, onDone }: Props)
               <button
                 type="submit"
                 disabled={busy}
-                className="btn btn-primary px-5 py-3.5 text-[15px] flex-1 disabled:opacity-70 disabled:cursor-wait"
+                className="btn btn-ink px-5 py-3.5 text-[15px] flex-1 disabled:opacity-70 disabled:cursor-wait"
               >
                 {busy ? "Sending" : "Tell my gym"}
                 {!busy && <span aria-hidden="true">→</span>}
@@ -405,7 +405,7 @@ export default function EnrichmentModal({ open, subscriptionId, onDone }: Props)
               <button
                 type="submit"
                 disabled={busy}
-                className="btn btn-primary px-5 py-3.5 text-[15px] flex-1 disabled:opacity-70 disabled:cursor-wait"
+                className="btn btn-ink px-5 py-3.5 text-[15px] flex-1 disabled:opacity-70 disabled:cursor-wait"
               >
                 {busy ? "Sending" : "Lock in founding-partner pricing"}
                 {!busy && <span aria-hidden="true">→</span>}
