@@ -2,10 +2,17 @@
 
 import { useState, FormEvent, useId, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import EnrichmentModal from "./EnrichmentModal";
 
 type Variant = "dark" | "light";
 
 const isEmail = (s: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s.trim());
+
+interface SignupResult {
+  ref: string;
+  position: number;
+  subscriptionId: string | null;
+}
 
 export default function WaitlistForm({
   id,
@@ -21,7 +28,6 @@ export default function WaitlistForm({
   const router = useRouter();
   const [referredBy, setReferredBy] = useState<string | null>(null);
   useEffect(() => {
-    // Read post-hydration so the form remains a fully static SSG target.
     if (typeof window === "undefined") return;
     const ref = new URLSearchParams(window.location.search).get("ref");
     if (ref) setReferredBy(ref);
@@ -32,6 +38,12 @@ export default function WaitlistForm({
   const [honeypot, setHoneypot] = useState("");
   const [state, setState] = useState<"idle" | "submitting" | "error">("idle");
   const [error, setError] = useState<string | null>(null);
+
+  // After the email-only POST succeeds, store the result and open the modal.
+  // The redirect to /confirmed only happens when the modal closes (skip,
+  // backdrop, ESC, or successful enrichment submit).
+  const [signupResult, setSignupResult] = useState<SignupResult | null>(null);
+  const [modalOpen, setModalOpen] = useState(false);
 
   const dark = variant === "dark";
 
@@ -65,84 +77,103 @@ export default function WaitlistForm({
         return;
       }
       // TODO(analytics): fire conversion event here once analytics is wired.
-      const qs = new URLSearchParams({
+      setSignupResult({
         ref: data.ref,
-        pos: String(data.position),
+        position: data.position,
+        subscriptionId: data.subscriptionId ?? null,
       });
-      router.push(`/confirmed?${qs.toString()}`);
+      setModalOpen(true);
+      setState("idle");
     } catch {
       setError("Network hiccup. Try again.");
       setState("error");
     }
   }
 
+  function handleModalDone() {
+    setModalOpen(false);
+    if (!signupResult) return;
+    const qs = new URLSearchParams({
+      ref: signupResult.ref,
+      pos: String(signupResult.position),
+    });
+    router.push(`/confirmed?${qs.toString()}`);
+  }
+
   return (
-    <form
-      id={id}
-      onSubmit={onSubmit}
-      noValidate
-      className={`flex flex-col gap-2.5 ${className}`}
-      aria-describedby={error ? errorId : undefined}
-    >
-      <label htmlFor={`${id ?? "wl"}-email`} className="sr-only">
-        Email address
-      </label>
-      <input
-        id={`${id ?? "wl"}-email`}
-        type="email"
-        name="email"
-        inputMode="email"
-        autoComplete="email"
-        required
-        placeholder="you@example.com"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        className={inputCls}
-        aria-invalid={state === "error" ? true : undefined}
-      />
-
-      {/* Honeypot. Hidden from real users, visible to dumb bots. */}
-      <input
-        type="text"
-        name="hp"
-        tabIndex={-1}
-        autoComplete="off"
-        value={honeypot}
-        onChange={(e) => setHoneypot(e.target.value)}
-        aria-hidden="true"
-        className="absolute left-[-9999px] h-0 w-0 opacity-0"
-      />
-
-      <button
-        type="submit"
-        disabled={state === "submitting"}
-        className={`${btnCls} disabled:opacity-70 disabled:cursor-wait`}
+    <>
+      <form
+        id={id}
+        onSubmit={onSubmit}
+        noValidate
+        className={`flex flex-col gap-2.5 ${className}`}
+        aria-describedby={error ? errorId : undefined}
       >
-        {state === "submitting" ? (
-          <span className="inline-flex items-center gap-2">
-            <span
-              className="h-4 w-4 rounded-full border-2 border-current border-t-transparent animate-spin"
-              aria-hidden="true"
-            />
-            Sending
-          </span>
-        ) : (
-          <>
-            {cta}
-            <span aria-hidden="true">→</span>
-          </>
-        )}
-      </button>
+        <label htmlFor={`${id ?? "wl"}-email`} className="sr-only">
+          Email address
+        </label>
+        <input
+          id={`${id ?? "wl"}-email`}
+          type="email"
+          name="email"
+          inputMode="email"
+          autoComplete="email"
+          required
+          placeholder="you@example.com"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className={inputCls}
+          aria-invalid={state === "error" ? true : undefined}
+        />
 
-      {error && (
-        <p
-          id={errorId}
-          role="alert"
-          className={`text-[13px] mt-1 ${dark ? "text-[#FFB39A]" : "text-[#A7442B]"}`}
+        <input
+          type="text"
+          name="hp"
+          tabIndex={-1}
+          autoComplete="off"
+          value={honeypot}
+          onChange={(e) => setHoneypot(e.target.value)}
+          aria-hidden="true"
+          className="absolute left-[-9999px] h-0 w-0 opacity-0"
+        />
+
+        <button
+          type="submit"
+          disabled={state === "submitting"}
+          className={`${btnCls} disabled:opacity-70 disabled:cursor-wait`}
         >
-          {error}
-        </p>
-      )}
-    </form>
+          {state === "submitting" ? (
+            <span className="inline-flex items-center gap-2">
+              <span
+                className="h-4 w-4 rounded-full border-2 border-current border-t-transparent animate-spin"
+                aria-hidden="true"
+              />
+              Sending
+            </span>
+          ) : (
+            <>
+              {cta}
+              <span aria-hidden="true">→</span>
+            </>
+          )}
+        </button>
+
+        {error && (
+          <p
+            id={errorId}
+            role="alert"
+            className={`text-[13px] mt-1 ${dark ? "text-[#FFB39A]" : "text-[#A7442B]"}`}
+          >
+            {error}
+          </p>
+        )}
+      </form>
+
+      <EnrichmentModal
+        open={modalOpen}
+        subscriptionId={signupResult?.subscriptionId ?? null}
+        onDone={handleModalDone}
+      />
+    </>
   );
 }

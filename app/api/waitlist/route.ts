@@ -57,7 +57,14 @@ export async function POST(req: NextRequest) {
       // so the share link still works on day one.
       const ref = sub.beehiivReferralCode ?? ourRefCode;
       const position = FAKE_BASE_POSITION + 1 + Math.floor(Math.random() * 3);
-      return NextResponse.json({ ok: true, ref, position });
+      // subscriptionId is exposed so the client can call /api/enrich to bolt on
+      // persona-specific fields after the initial email-only signup.
+      return NextResponse.json({
+        ok: true,
+        ref,
+        position,
+        subscriptionId: sub.providerId,
+      });
     } catch (err) {
       if (err instanceof BeehiivApiError) {
         // Log and return a soft error so the form can show a friendly message.
@@ -86,5 +93,10 @@ export async function POST(req: NextRequest) {
     referredBy,
   });
   const position = FAKE_BASE_POSITION + 1 + Math.floor(Math.random() * 3);
-  return NextResponse.json({ ok: true, ref: ourRefCode, position });
+  return NextResponse.json({
+    ok: true,
+    ref: ourRefCode,
+    position,
+    subscriptionId: null, // No provider, so no real id.
+  });
 }

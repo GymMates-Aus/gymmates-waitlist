@@ -132,6 +132,55 @@ export async function subscribeBeehiiv(
   };
 }
 
+export interface UpdateSubscriptionInput {
+  subscriptionId: string;
+  customFields: Array<{ name: string; value: string }>;
+  /**
+   * Optional override of the segment-routing audience tag. When a user lands
+   * on the consumer page but identifies as a gym owner via the enrichment
+   * modal, we flip them to "partner" so the partner segment + welcome flow
+   * picks them up correctly.
+   */
+  audienceOverride?: Audience;
+}
+
+/**
+ * PATCH /v2/publications/{id}/subscriptions/{sub}
+ * Used by the enrichment flow to bolt on first/last name + persona-specific
+ * fields after the initial email-only signup.
+ */
+export async function updateBeehiivSubscription(
+  input: UpdateSubscriptionInput,
+): Promise<{ ok: boolean }> {
+  const { apiKey, publicationId } = readConfig();
+
+  const customFields = input.audienceOverride
+    ? [
+        ...input.customFields.filter((f) => f.name !== "audience"),
+        { name: "audience", value: input.audienceOverride },
+      ]
+    : input.customFields;
+
+  const res = await fetch(
+    `${BEEHIIV_BASE}/publications/${publicationId}/subscriptions/${input.subscriptionId}`,
+    {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ custom_fields: customFields }),
+      cache: "no-store",
+    },
+  );
+
+  if (!res.ok) {
+    const text = await res.text();
+    throw new BeehiivApiError(res.status, text.slice(0, 500));
+  }
+  return { ok: true };
+}
+
 /**
  * Best-effort live subscriber count, with a 10-minute Next.js cache.
  * Returns null on any failure so callers can fall back to a stub number.
