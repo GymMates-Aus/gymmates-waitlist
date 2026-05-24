@@ -401,25 +401,16 @@ export default function EnrichmentModal({ open, subscriptionId, onDone }: Props)
               className="absolute left-[-9999px] h-0 w-0 opacity-0"
             />
 
-            <div className="mt-5 flex items-center gap-3">
-              <button
-                type="submit"
-                disabled={busy}
-                className="btn btn-ink px-5 py-3.5 text-[15px] flex-1 disabled:opacity-70 disabled:cursor-wait"
-              >
-                {busy ? "Sending" : "Lock in founding-partner pricing"}
-                {!busy && <span aria-hidden="true">→</span>}
-              </button>
-              <button
-                type="button"
-                onClick={() => close(false)}
-                className="text-[13px] text-bone/55 hover:text-bone underline underline-offset-4 decoration-bone/40"
-              >
-                Skip
-              </button>
-            </div>
+            <button
+              type="submit"
+              disabled={busy}
+              className="btn mt-5 w-full bg-bone text-ink hover:bg-bone-2 active:scale-[0.98] px-5 py-3.5 text-[15px] disabled:opacity-70 disabled:cursor-wait"
+            >
+              {busy ? "Sending" : "Join the foundation waitlist"}
+              {!busy && <span aria-hidden="true">→</span>}
+            </button>
             {error && (
-              <p id={errId} role="alert" className="text-[13px] mt-3 text-[#FFB39A]">
+              <p id={errId} role="alert" className="text-[13px] mt-3 text-ink">
                 {error}
               </p>
             )}
