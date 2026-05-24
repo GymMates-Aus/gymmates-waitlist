@@ -128,7 +128,7 @@ export default function EnrichmentModal({ open, subscriptionId, onDone }: Props)
       role="dialog"
       aria-modal="true"
       aria-labelledby="enrich-title"
-      className="fixed inset-0 z-[60] flex items-end sm:items-center justify-center"
+      className="fixed inset-0 z-[60] flex items-center justify-center p-4 sm:p-6"
     >
       {/* Backdrop */}
       <button
@@ -138,10 +138,12 @@ export default function EnrichmentModal({ open, subscriptionId, onDone }: Props)
         className="absolute inset-0 bg-ink/70 backdrop-blur-sm"
       />
 
-      {/* Sheet/dialog */}
+      {/* Sheet/dialog. Eucalypt is the lighter brand green; rounded on all
+          sides on every viewport; capped at max-h with scroll so long
+          enrichment forms don't blow past the small mobile viewport. */}
       <div
         ref={dialogRef}
-        className="relative w-full sm:max-w-xl mx-0 sm:mx-4 bg-forest text-bone shadow-deep rounded-t-2xl sm:rounded-2xl border border-white/10 overflow-hidden"
+        className="relative w-full max-w-[420px] sm:max-w-xl bg-eucalypt text-bone shadow-deep rounded-2xl border border-white/10 overflow-hidden max-h-[90svh] overflow-y-auto"
       >
         <div className="px-5 sm:px-7 pt-5 sm:pt-7 pb-2 flex items-start justify-between gap-3">
           <div>
@@ -169,22 +171,17 @@ export default function EnrichmentModal({ open, subscriptionId, onDone }: Props)
         </div>
 
         {persona === null && (
-          <div className="px-5 sm:px-7 pb-6 sm:pb-7 pt-4">
-            <p className="text-[15px] leading-[1.55] text-bone/75 mb-5">
-              Tell us who you are so we can point you in the right direction.
-              Skip if you&rsquo;d rather, your email is already on the list.
-            </p>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
+          <div className="px-5 sm:px-7 pb-6 sm:pb-7 pt-3">
+            <div className="flex flex-col gap-3 mb-4">
               <button
                 type="button"
                 onClick={() => setPersona("gym_owner")}
-                className="text-left group bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 hover:border-ochre/60 rounded-lg p-5 transition duration-fast ease-brand"
+                className="text-left group bg-white/[0.06] hover:bg-white/[0.12] active:bg-white/[0.14] border border-white/15 hover:border-ochre/70 rounded-lg p-4 sm:p-5 transition duration-fast ease-brand"
               >
-                <p className="font-display font-bold text-[17px] mb-1.5">
+                <p className="font-display font-bold text-[16px] sm:text-[17px] mb-1.5">
                   Gym Owner / Manager?
                 </p>
-                <p className="text-[13px] leading-[1.5] text-bone/65">
+                <p className="text-[13px] leading-[1.5] text-bone/70">
                   Bring GymMates to your members. Founding-partner pricing
                   locked for 24 months.
                 </p>
@@ -192,14 +189,14 @@ export default function EnrichmentModal({ open, subscriptionId, onDone }: Props)
               <button
                 type="button"
                 onClick={() => setPersona("user")}
-                className="text-left group bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 hover:border-ochre/60 rounded-lg p-5 transition duration-fast ease-brand"
+                className="text-left group bg-white/[0.06] hover:bg-white/[0.12] active:bg-white/[0.14] border border-white/15 hover:border-ochre/70 rounded-lg p-4 sm:p-5 transition duration-fast ease-brand"
               >
-                <p className="font-display font-bold text-[17px] mb-1.5">
+                <p className="font-display font-bold text-[16px] sm:text-[17px] mb-1.5">
                   Member of a Gym?
                 </p>
-                <p className="text-[13px] leading-[1.5] text-bone/65">
-                  Want a mate at your gym. We&rsquo;ll let your gym know one
-                  of their members is keen.
+                <p className="text-[13px] leading-[1.5] text-bone/70">
+                  Want a mate at your gym? We&rsquo;ll let them know
+                  you&rsquo;re keen, we just need some quick info.
                 </p>
               </button>
             </div>
