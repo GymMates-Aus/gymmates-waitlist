@@ -182,6 +182,40 @@ export async function updateBeehiivSubscription(
 }
 
 /**
+ * Apply one or more tags to a subscription.
+ * Tags must already exist in the publication (created in Beehiiv UI:
+ * Audience -> Subscribers -> Tags tab -> New Tag). If a tag name doesn't
+ * exist, Beehiiv silently no-ops, so this function is safe to call before
+ * the user has created the tags. Throws on transport/auth failures only.
+ */
+export async function applyBeehiivTags(
+  subscriptionId: string,
+  tagNames: string[],
+): Promise<{ ok: boolean }> {
+  if (!subscriptionId.startsWith("sub_") || tagNames.length === 0) {
+    return { ok: true };
+  }
+  const { apiKey, publicationId } = readConfig();
+  const res = await fetch(
+    `${BEEHIIV_BASE}/publications/${publicationId}/subscriptions/${subscriptionId}/tags`,
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ tags: tagNames }),
+      cache: "no-store",
+    },
+  );
+  if (!res.ok && res.status !== 201) {
+    const text = await res.text();
+    throw new BeehiivApiError(res.status, text.slice(0, 500));
+  }
+  return { ok: true };
+}
+
+/**
  * Best-effort live subscriber count, with a 10-minute Next.js cache.
  * Returns null on any failure so callers can fall back to a stub number.
  */

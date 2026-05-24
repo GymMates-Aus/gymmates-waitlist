@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import {
+  applyBeehiivTags,
   BeehiivApiError,
   BeehiivConfigError,
   isBeehiivConfigured,
@@ -116,6 +117,17 @@ export async function POST(req: NextRequest) {
       // segment so the right welcome flow + sales sequence fires.
       audienceOverride: persona === "gym_owner" ? "partner" : undefined,
     });
+    // Apply a coloured tag so the subscriber is visually identifiable in
+    // the Beehiiv UI. Tag names must match what was created in Beehiiv
+    // (Audience -> Subscribers -> Tags). If the tag doesn't exist yet,
+    // Beehiiv silently no-ops, so this is safe to call regardless.
+    try {
+      await applyBeehiivTags(subscriptionId, [
+        persona === "gym_owner" ? "Gym Owner" : "Gym Member",
+      ]);
+    } catch (tagErr) {
+      console.error("[enrich] tag apply failed (non-fatal)", tagErr);
+    }
     return NextResponse.json({ ok: true, enriched: true });
   } catch (err) {
     if (err instanceof BeehiivApiError) {

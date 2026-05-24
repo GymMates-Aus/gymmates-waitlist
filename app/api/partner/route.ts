@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { generateRefCode } from "@/lib/refCode";
 import {
+  applyBeehiivTags,
   BeehiivApiError,
   BeehiivConfigError,
   isBeehiivConfigured,
@@ -78,12 +79,23 @@ export async function POST(req: NextRequest) {
 
   if (isBeehiivConfigured()) {
     try {
-      await subscribeBeehiiv({
+      const sub = await subscribeBeehiiv({
         email,
         ourRefCode,
         audience: "partner",
         extraCustomFields,
       });
+      // Apply the coloured 'Gym Owner' tag so the subscriber is visually
+      // identifiable in Beehiiv's subscriber table. Tag must exist in
+      // Beehiiv UI (Audience -> Subscribers -> Tags). If it doesn't exist,
+      // Beehiiv silently no-ops, so this is safe to call regardless.
+      if (sub.providerId) {
+        try {
+          await applyBeehiivTags(sub.providerId, ["Gym Owner"]);
+        } catch (tagErr) {
+          console.error("[partner] tag apply failed (non-fatal)", tagErr);
+        }
+      }
       return NextResponse.json({ ok: true });
     } catch (err) {
       if (err instanceof BeehiivApiError) {
