@@ -34,7 +34,7 @@ export default function LearnMore() {
           href={WEBSITE_URL}
           target="_blank"
           rel="noopener noreferrer"
-          className="btn btn-ink mt-7 sm:mt-8 px-6 py-3.5 text-[15px]"
+          className="btn btn-primary cta-pulse mt-7 sm:mt-8 px-6 py-4 text-[15px] sm:text-[16px]"
         >
           Learn more about GymMates
           <svg
