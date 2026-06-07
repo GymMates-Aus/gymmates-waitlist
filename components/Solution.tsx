@@ -9,7 +9,7 @@ const steps = [
   {
     n: "02",
     title: "Get matched with one mate.",
-    body: "Same gym. Same vibe. Same rough schedule. Same gender by default.",
+    body: "Matched on goals, schedule, and experience (mentor or peer, your call). Same gym. Same gender by default.",
   },
   {
     n: "03",

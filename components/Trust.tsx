@@ -6,10 +6,37 @@ export default function Trust() {
       <div className="max-w-3xl mx-auto px-5 sm:px-8 text-center">
         <p className="eyebrow mb-4">Built by gym people</p>
         <p className="text-[18px] sm:text-[20px] leading-[1.55] text-ink">
-          Made by the team behind Next Level Echuca, a regional gym that&rsquo;s spent 13+ years
-          working out what makes members actually show up. Spoiler:{" "}
-          <span className="accent-italic">it&rsquo;s mates.</span>
+          Built by the team behind Next Level Echuca. 13+ years inside a
+          service-based gym. We figured out what makes members show up.
+          Spoiler: <span className="accent-italic">it&rsquo;s mates.</span>
         </p>
+
+        <dl className="mt-7 grid grid-cols-3 gap-4 sm:gap-6 max-w-md mx-auto">
+          <div className="border-l-2 border-ochre pl-3 sm:pl-4 text-left">
+            <dt className="font-display font-extrabold text-[24px] sm:text-[28px] leading-none text-ink tabular-nums tracking-tight">
+              13+
+            </dt>
+            <dd className="text-[11px] sm:text-[12px] text-earth uppercase tracking-eyebrow mt-1">
+              Years
+            </dd>
+          </div>
+          <div className="border-l-2 border-ochre pl-3 sm:pl-4 text-left">
+            <dt className="font-display font-extrabold text-[24px] sm:text-[28px] leading-none text-ink tabular-nums tracking-tight">
+              80%
+            </dt>
+            <dd className="text-[11px] sm:text-[12px] text-earth uppercase tracking-eyebrow mt-1">
+              Visitation
+            </dd>
+          </div>
+          <div className="border-l-2 border-ochre pl-3 sm:pl-4 text-left">
+            <dt className="font-display font-extrabold text-[24px] sm:text-[28px] leading-none text-ink tabular-nums tracking-tight">
+              1,000+
+            </dt>
+            <dd className="text-[11px] sm:text-[12px] text-earth uppercase tracking-eyebrow mt-1">
+              Members
+            </dd>
+          </div>
+        </dl>
 
         <div className="mt-7 inline-flex items-center gap-3">
           <Image

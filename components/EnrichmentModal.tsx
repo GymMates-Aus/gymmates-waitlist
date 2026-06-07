@@ -210,13 +210,37 @@ export default function EnrichmentModal({ open, subscriptionId, onDone }: Props)
               </button>
             </div>
 
-            <button
-              type="button"
-              onClick={() => close(false)}
-              className="text-[13px] text-bone/55 hover:text-bone underline underline-offset-4 decoration-bone/40"
-            >
-              Skip for now. I&rsquo;ll finish later.
-            </button>
+            <div className="flex flex-col gap-3">
+              <a
+                href="https://gymmates-app.netlify.app/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-bone hover:text-bone-2 underline underline-offset-4 decoration-bone/60 hover:decoration-bone"
+              >
+                Learn more about GymMates here
+                <svg
+                  width="13"
+                  height="13"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M7 17 17 7" />
+                  <path d="M7 7h10v10" />
+                </svg>
+              </a>
+              <button
+                type="button"
+                onClick={() => close(false)}
+                className="self-start text-[13px] text-bone/55 hover:text-bone underline underline-offset-4 decoration-bone/40"
+              >
+                Skip for now. I&rsquo;ll finish later.
+              </button>
+            </div>
           </div>
         )}
 

@@ -4,7 +4,7 @@ const tiers = [
     headline: "For smaller studios",
     price: "$60",
     cadence: "/mo",
-    sub: "Per location, per month · Up to 100 members",
+    sub: "Per location, per month · Up to 10 members",
     feats: [
       "The GymMates app, free for your members",
       "Full onboarding session, we come to you",
@@ -19,7 +19,7 @@ const tiers = [
     headline: "For full gyms",
     price: "$99",
     cadence: "/mo",
-    sub: "Per location, per month · Unlimited members",
+    sub: "Per location, per month · Up to 100 members",
     feats: [
       "Everything in Friends Plan",
       "Post-match prompt to leave a 5-star Google review",
@@ -28,6 +28,21 @@ const tiers = [
     ],
     cta: "Apply for Mates Rates",
     rec: true,
+  },
+  {
+    name: "The real deal",
+    headline: "For unlimited scale",
+    price: "$149",
+    cadence: "/mo",
+    sub: "Per location, per month · Unlimited members",
+    feats: [
+      "Everything in Mates Rates",
+      "Unlimited member matching across your whole roster",
+      "Priority support direct from the founders",
+      "Multi-location reporting when you add sister gyms",
+    ],
+    cta: "Apply for The Real Deal",
+    rec: false,
   },
 ];
 
@@ -46,7 +61,7 @@ export default function PartnerPricing() {
           </p>
         </div>
 
-        <div className="grid gap-4 sm:gap-5 md:grid-cols-2">
+        <div className="grid gap-4 sm:gap-5 md:grid-cols-3">
           {tiers.map((t) => {
             const dark = t.rec;
             return (

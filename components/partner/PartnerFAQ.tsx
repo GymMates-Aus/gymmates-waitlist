@@ -5,7 +5,7 @@ import { useState } from "react";
 const items = [
   {
     q: "What does it cost?",
-    a: "Per location, per month. $60 for studios up to 100 members, $99 for full gyms. Founding partners lock these rates for 24 months.",
+    a: "Per location, per month. $60 for studios up to 10 members, $99 up to 100, $149 for unlimited. Founding partners lock these rates for 24 months.",
   },
   {
     q: "Do my members pay anything?",

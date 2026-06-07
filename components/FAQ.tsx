@@ -17,7 +17,7 @@ const items = [
   },
   {
     q: "Is this a dating app?",
-    a: "No. Friendship and training only. Same-gender matching by default, with block and report on every profile.",
+    a: "No. Friendship and training only. Matched on goals, exercise schedule, and experience preference (mentor or peer). Same-gender by default, with block and report on every profile.",
   },
   {
     q: "What do you do with my email?",
