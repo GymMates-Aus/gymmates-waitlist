@@ -1,24 +1,23 @@
 import Hero from "@/components/Hero";
-import Problem from "@/components/Problem";
-import Solution from "@/components/Solution";
-import Movement from "@/components/Movement";
-import Trust from "@/components/Trust";
-import FAQ from "@/components/FAQ";
-import FinalCTA from "@/components/FinalCTA";
+import LearnMore from "@/components/LearnMore";
 import Footer from "@/components/Footer";
 import StickyCTA from "@/components/StickyCTA";
+
+// The waitlist landing page is intentionally a two-section page now: the
+// hero (with the inline signup form) and a Learn More bridge that sends
+// curious visitors to the full marketing site at gymmates-app.netlify.app
+// for the deeper product story (pricing, matching, founders, proof).
+//
+// Problem / Solution / Movement / Trust / FAQ / FinalCTA components are
+// preserved in the repo for reuse on the partner page and for future
+// A/B testing, but they're no longer rendered on this route.
 
 export default function Page() {
   return (
     <>
       <main className="sticky-pad">
         <Hero />
-        <Problem />
-        <Solution />
-        <Movement />
-        <Trust />
-        <FAQ />
-        <FinalCTA />
+        <LearnMore />
       </main>
       <Footer />
       <StickyCTA />
